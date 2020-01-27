@@ -1,1 +1,0 @@
-("~/.emacs.d/" "~/fall2019/HelloWorld/" "~/fall2019/HelloWorld/wwwroot/" "~/fall2019/HelloWorld/obj/" "~/fall2019/HelloWorld/bin/" "~/fall2019/HelloWorld/Properties/" "~/fall2019/HelloWorld/Pages/" "~/fall2019/HelloWorld/.git/")
