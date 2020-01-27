@@ -30,6 +30,7 @@
 (delete-selection-mode)
 (global-hl-line-mode)
 (setq indent-tabs-mode nil)
+(setq scroll-conservatively 5)
 
 ;; remember mode
 (global-set-key (kbd "C-c r") 'remember)
@@ -82,6 +83,7 @@ left. Makes making indented lists nicer"
 
 (use-package flyspell-correct-ivy
   :ensure t
+  :after ivy
   :config
   (bind-key (kbd "C-;") 'flyspell-correct-wrapper flyspell-mode-map))
 
@@ -153,3 +155,4 @@ left. Makes making indented lists nicer"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'upcase-region 'disabled nil)
