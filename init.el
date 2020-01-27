@@ -122,16 +122,6 @@ left. Makes making indented lists nicer"
   :init (unbind-key (kbd "C-z"))
   :bind ("C-z" . avy-goto-char))
 
-(use-package frog-menu
-  :ensure t)
-
-(use-package frog-jump-buffer
-  :ensure t
-  :after frog-menu
-  :bind
-  ("C-x b" . frog-jump-buffer)
-  ("C-c b" . ivy-switch-buffer))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; AUTOMATICALLY CONFIGURED DONT TOUCH ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -147,7 +137,7 @@ left. Makes making indented lists nicer"
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (flyspell-correct-ivy company doom-modeline aggressive-indent counsel swiper frog-jump-buffer frog-menu avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+    (flyspell-correct-ivy company doom-modeline aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
