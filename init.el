@@ -65,21 +65,29 @@ left. Makes making indented lists nicer"
   :config
   (load-theme 'base16-gruvbox-dark-pale t))
 
-(use-package doom-modeline
+(use-package smart-mode-line
   :ensure t
   :config
-  (doom-modeline-mode)
-  (setq doom-modeline-icon nil))
-
+  ;;(setq sml/theme 'dark)
+  (sml/setup))
 
 ;; Editing
+(use-package clang-format
+  :ensure t
+  :diminish
+  :bind
+  ("C-c C-f" . clang-format-buffer)
+  :config
+  (setq clang-format-style "llvm"))
+
 (use-package company
   :ensure t
   :diminish
   :bind ("C-c TAB" . company-complete)
   :config
   (global-company-mode 1)
-  (setq company-show-numbers t))
+  (setq company-show-numbers t)
+  (setq company-idle-delay 0))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -122,6 +130,13 @@ left. Makes making indented lists nicer"
   :init (unbind-key (kbd "C-z"))
   :bind ("C-z" . avy-goto-char))
 
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode 1)
+  :bind
+  ("C-c p" . projectile-command-map))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; AUTOMATICALLY CONFIGURED DONT TOUCH ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,12 +147,12 @@ left. Makes making indented lists nicer"
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default)))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default)))
  '(electric-pair-mode t)
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (flyspell-correct-ivy company doom-modeline aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+    (clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
