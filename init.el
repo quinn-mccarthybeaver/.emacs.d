@@ -53,12 +53,6 @@ left. Makes making indented lists nicer"
 ;; Python
 (setq python-shell-interpreter "/usr/bin/python")
 
-;; TODO:     linter/autoformater/cleaner/whatever (whitespace mode? whitspace-clean hook?)
-;; TESTING:  tab settings (currently Aggressive Indent), removed Drag-stuff
-;; CONSIDER: suggest (opens a buffer, suggests elisp functions to do things)
-
-;; RECENT DECISIONS: company is way better than auto-complete
-
 ;; Appearance
 (use-package base16-theme
   :ensure t
@@ -80,6 +74,12 @@ left. Makes making indented lists nicer"
   :config
   (setq clang-format-style "llvm"))
 
+(use-package key-chord
+  :ensure t
+  :config
+  (key-chord-mode 1)
+  (key-chord-define-global ";;" "\C-e;"))
+
 (use-package company
   :ensure t
   :diminish
@@ -87,7 +87,8 @@ left. Makes making indented lists nicer"
   :config
   (global-company-mode 1)
   (setq company-show-numbers t)
-  (setq company-idle-delay 0))
+  (setq company-idle-delay 0)
+  (setq company-auto-complete 1))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -145,6 +146,7 @@ left. Makes making indented lists nicer"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-auto-complete-chars (quote (40 41 46)))
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default)))
@@ -152,7 +154,7 @@ left. Makes making indented lists nicer"
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+    (key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
