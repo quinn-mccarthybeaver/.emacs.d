@@ -80,6 +80,7 @@ left. Makes making indented lists nicer"
   (key-chord-mode 1)
   (key-chord-define-global ";;" "\C-e;"))
 
+
 (use-package company
   :ensure t
   :diminish
@@ -88,7 +89,19 @@ left. Makes making indented lists nicer"
   (global-company-mode 1)
   (setq company-show-numbers t)
   (setq company-idle-delay 0)
-  (setq company-auto-complete 1))
+  (setq company-auto-complete 1)
+  (setq-default abbrev-mode nil))
+
+(use-package eglot
+  :ensure t
+  :diminish
+  :hook
+  ((python-mode c-mode) . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
+  (setq eglot-autoshutdown t)
+  (setq eglot-events-buffer-size 0))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -158,7 +171,7 @@ left. Makes making indented lists nicer"
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+    (eglot key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
