@@ -92,6 +92,7 @@ left. Makes making indented lists nicer"
 
 (use-package flyspell-correct-ivy
   :ensure t
+  :diminish
   :after ivy
   :config
   (bind-key (kbd "C-;") 'flyspell-correct-wrapper flyspell-mode-map))
@@ -147,6 +148,9 @@ left. Makes making indented lists nicer"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-auto-complete-chars (quote (40 41 46)))
+ '(company-backends
+   (quote
+    (company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev)))
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default)))
