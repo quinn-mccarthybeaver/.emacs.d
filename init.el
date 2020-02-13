@@ -31,6 +31,7 @@
 (global-hl-line-mode)
 (setq indent-tabs-mode nil)
 (setq scroll-conservatively 5)
+(setq-default major-mode 'prog-mode)
 
 ;; remember mode
 (global-set-key (kbd "C-c r") 'remember)
@@ -39,7 +40,6 @@
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'org-indent-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
-(setq-default major-mode 'org-mode)
 
 (defun my-org-newline-and-indent ()
   "makes new item, indents, and shifts the item head to the
@@ -52,6 +52,8 @@ left. Makes making indented lists nicer"
 
 ;; Python
 (setq python-shell-interpreter "/usr/bin/python")
+
+;;; PACKAGES
 
 ;; Appearance
 (use-package base16-theme
@@ -92,11 +94,19 @@ left. Makes making indented lists nicer"
   (setq company-auto-complete 1)
   (setq-default abbrev-mode nil))
 
+;;; dependancies for pyls:
+;;; Rope: completions and renaming (Downloaded)
+;;; Pyflakes: error detection
+;;; McCabe: complexity checking
+;;; pycodestyle: checks codestyle
+;;; YAPF: code formatting (Downloaded)
 (use-package eglot
   :ensure t
   :diminish
   :hook
   ((python-mode c-mode) . eglot-ensure)
+  :bind
+  ("C-c e r" . 'eglot-reconnect)
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
