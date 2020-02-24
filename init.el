@@ -22,7 +22,7 @@
 (windmove-default-keybindings)
 (electric-pair-mode)
 (show-paren-mode)
-(setq ring-bell-function 'ignore) ;; TODO: find something better or decide to remove this note
+(setq ring-bell-function 'ignore)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (menu-bar-mode -1)
@@ -71,8 +71,8 @@ left. Makes making indented lists nicer"
 (use-package clang-format
   :ensure t
   :diminish
-  :bind
-  ("C-c C-f" . clang-format-buffer)
+  ;;:bind
+  ;;("C-c C-f" . clang-format-buffer)
   :config
   (setq clang-format-style "llvm"))
 
@@ -94,6 +94,12 @@ left. Makes making indented lists nicer"
   (setq company-auto-complete 1)
   (setq-default abbrev-mode nil))
 
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1)
+  :diminish)
+
 ;;; dependancies for pyls:
 ;;; Rope: completions and renaming (Downloaded)
 ;;; Pyflakes: error detection
@@ -107,6 +113,7 @@ left. Makes making indented lists nicer"
   ((python-mode c-mode) . eglot-ensure)
   :bind
   ("C-c e r" . 'eglot-reconnect)
+  ("C-c e f" . 'eglot-format-buffer)
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
@@ -181,7 +188,7 @@ left. Makes making indented lists nicer"
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (eglot key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+    (yasnippet eglot key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
