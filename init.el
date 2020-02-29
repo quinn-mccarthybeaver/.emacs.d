@@ -32,6 +32,8 @@
 (setq indent-tabs-mode nil)
 (setq scroll-conservatively 5)
 (setq-default major-mode 'prog-mode)
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 1) ((meta)) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
 
 ;; remember mode
 (global-set-key (kbd "C-c r") 'remember)
@@ -112,7 +114,7 @@ left. Makes making indented lists nicer"
   :hook
   ((python-mode c-mode) . eglot-ensure)
   :bind
-  ("C-c e r" . 'eglot-reconnect)
+  ("C-c e r" . 'eglot-rename)
   ("C-c e f" . 'eglot-format-buffer)
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
@@ -139,7 +141,8 @@ left. Makes making indented lists nicer"
 
 (use-package aggressive-indent
   :ensure t
-  :config (aggressive-indent-global-mode))
+  ;;:config (aggressive-indent-global-mode)
+  )
 
 ;; Search / Movement / Quality of life
 (use-package ivy
