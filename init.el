@@ -19,6 +19,7 @@
   :ensure t)
 
 ;; Sane defaults
+(setq initial-scratch-message "; scratch pad\n")
 (windmove-default-keybindings)
 (electric-pair-mode)
 (show-paren-mode)
@@ -28,11 +29,10 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (delete-selection-mode)
-(global-hl-line-mode)
 (setq indent-tabs-mode nil)
 (setq scroll-conservatively 5)
 (setq-default major-mode 'prog-mode)
-(setq mouse-wheel-scroll-amount '(2 ((shift) . 1) ((meta)) ((control) . nil)))
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 4) ((meta)) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
 ;; remember mode
@@ -70,20 +70,11 @@ left. Makes making indented lists nicer"
   (sml/setup))
 
 ;; Editing
-(use-package clang-format
-  :ensure t
-  :diminish
-  ;;:bind
-  ;;("C-c C-f" . clang-format-buffer)
-  :config
-  (setq clang-format-style "llvm"))
-
 (use-package key-chord
   :ensure t
   :config
   (key-chord-mode 1)
   (key-chord-define-global ";;" "\C-e;"))
-
 
 (use-package company
   :ensure t
@@ -93,14 +84,13 @@ left. Makes making indented lists nicer"
   (global-company-mode 1)
   (setq company-show-numbers t)
   (setq company-idle-delay 0)
-  (setq company-auto-complete 1)
   (setq-default abbrev-mode nil))
 
 (use-package yasnippet
   :ensure t
+  :diminish
   :config
-  (yas-global-mode 1)
-  :diminish)
+  (yas-global-mode 1))
 
 ;;; dependancies for pyls:
 ;;; Rope: completions and renaming (Downloaded)
@@ -139,11 +129,6 @@ left. Makes making indented lists nicer"
   :bind (("C-=" . er/expand-region)
          ("C--" . er/contract-region)))
 
-(use-package aggressive-indent
-  :ensure t
-  ;;:config (aggressive-indent-global-mode)
-  )
-
 ;; Search / Movement / Quality of life
 (use-package ivy
   :ensure t
@@ -165,10 +150,12 @@ left. Makes making indented lists nicer"
   :init (unbind-key (kbd "C-z"))
   :bind ("C-z" . avy-goto-char))
 
+;probation
 (use-package projectile
   :ensure t
+  :diminish
   :config
-  (projectile-mode 1)
+  ;;(projectile-mode 1)
   :bind
   ("C-c p" . projectile-command-map))
 
@@ -180,18 +167,14 @@ left. Makes making indented lists nicer"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-auto-complete-chars (quote (40 41 46)))
+ '(company-auto-complete-chars '(40 41 46))
  '(company-backends
-   (quote
-    (company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev)))
+   '(company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev))
  '(custom-safe-themes
-   (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default)))
+   '("fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default))
  '(electric-pair-mode t)
- '(global-hl-line-mode t)
  '(package-selected-packages
-   (quote
-    (yasnippet eglot key-chord clang-format projectile smart-mode-line flyspell-correct-ivy company aggressive-indent counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish)))
+   '(yasnippet eglot key-chord projectile smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
