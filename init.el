@@ -58,16 +58,29 @@ left. Makes making indented lists nicer"
 ;;; PACKAGES
 
 ;; Appearance
-(use-package base16-theme
-  :ensure t
-  :config
-  (load-theme 'base16-gruvbox-dark-pale t))
+;; themes I like:
+;; base16-gruvbox-dark-pale
+;; doom-gruvbox
+;; doom-acario-dark
+;; doom-manegarm
+;; doom-outrun-electric
 
-(use-package smart-mode-line
+(use-package base16-theme
+  :ensure t)
+
+(use-package doom-themes
   :ensure t
   :config
-  ;;(setq sml/theme 'dark)
-  (sml/setup))
+  ;;(load-them 'base16-gruvbox-dark-pale)
+  (load-theme 'doom-outrun-electric t))
+
+(use-package all-the-icons
+  :ensure t)
+
+(use-package doom-modeline
+  :after all-the-icons
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
 
 ;; Editing
 (use-package key-chord
@@ -171,10 +184,10 @@ left. Makes making indented lists nicer"
  '(company-backends
    '(company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev))
  '(custom-safe-themes
-   '("fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default))
+   '("1526aeed166165811eefd9a6f9176061ec3d121ba39500af2048073bea80911e" "fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default))
  '(electric-pair-mode t)
  '(package-selected-packages
-   '(yasnippet eglot key-chord projectile smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
+   '(doom-modeline doom-themes yasnippet eglot key-chord projectile smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
