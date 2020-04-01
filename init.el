@@ -19,6 +19,7 @@
   :ensure t)
 
 ;; Sane defaults
+(line-number-mode t)
 (setq initial-scratch-message "; scratch pad\n")
 (windmove-default-keybindings)
 (electric-pair-mode)
@@ -163,15 +164,6 @@ left. Makes making indented lists nicer"
   :init (unbind-key (kbd "C-z"))
   :bind ("C-z" . avy-goto-char))
 
-;probation
-(use-package projectile
-  :ensure t
-  :diminish
-  :config
-  ;;(projectile-mode 1)
-  :bind
-  ("C-c p" . projectile-command-map))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; AUTOMATICALLY CONFIGURED DONT TOUCH ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -187,7 +179,7 @@ left. Makes making indented lists nicer"
    '("1526aeed166165811eefd9a6f9176061ec3d121ba39500af2048073bea80911e" "fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default))
  '(electric-pair-mode t)
  '(package-selected-packages
-   '(doom-modeline doom-themes yasnippet eglot key-chord projectile smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
+   '(doom-modeline doom-themes yasnippet eglot key-chord smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
