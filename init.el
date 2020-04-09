@@ -18,12 +18,23 @@
 (use-package bind-key
   :ensure t)
 
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-add-key-based-replacements
+    "C-c &" "Yasnippet"
+    "C-c e" "Eglot"
+    "C-c a" "Avy"
+    "C-c a m" "Move"
+    "C-c a c" "Copy"
+    "C-c a k" "Kill")
+  (which-key-mode 1))
+
 ;; Sane defaults
-(line-number-mode t)
-(setq initial-scratch-message "; scratch pad\n")
+(setq initial-scratch-message "")
 (windmove-default-keybindings)
-(electric-pair-mode)
-(show-paren-mode)
+(electric-pair-mode t)
+(show-paren-mode t)
 (setq ring-bell-function 'ignore)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
@@ -36,13 +47,13 @@
 (setq mouse-wheel-scroll-amount '(2 ((shift) . 4) ((meta)) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
-;; remember mode
-(global-set-key (kbd "C-c r") 'remember)
-
 ;; Org-mode defaults
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'org-indent-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
+
+(setq org-agenda-files "~/org/")
+(setq org-agenda-file-regexp ".*org^")
 
 (defun my-org-newline-and-indent ()
   "makes new item, indents, and shifts the item head to the
@@ -53,8 +64,6 @@ left. Makes making indented lists nicer"
   (org-shiftleft))
 (eval-after-load 'org '(bind-key (kbd "C-c <C-return>") 'my-org-newline-and-indent org-mode-map))
 
-;; Python
-(setq python-shell-interpreter "/usr/bin/python")
 
 ;;; PACKAGES
 
@@ -73,7 +82,8 @@ left. Makes making indented lists nicer"
   :ensure t
   :config
   ;;(load-them 'base16-gruvbox-dark-pale)
-  (load-theme 'doom-outrun-electric t))
+  ;; the nil enables the theme immediatly
+  (load-theme 'doom-outrun-electric t nil))
 
 (use-package all-the-icons
   :ensure t)
@@ -81,7 +91,9 @@ left. Makes making indented lists nicer"
 (use-package doom-modeline
   :after all-the-icons
   :ensure t
-  :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-icon t))
 
 ;; Editing
 (use-package key-chord
@@ -93,9 +105,14 @@ left. Makes making indented lists nicer"
 (use-package company
   :ensure t
   :diminish
-  :bind ("C-c TAB" . company-complete)
+  :bind
+  ("C-;" . company-complete)
+  (:map company-active-map
+	("C-n" . 'company-select-next)
+	("C-p" . 'company-select-previous))
   :config
   (global-company-mode 1)
+  (setq company-minimum-prefix-length 2)
   (setq company-show-numbers t)
   (setq company-idle-delay 0)
   (setq-default abbrev-mode nil))
@@ -104,7 +121,8 @@ left. Makes making indented lists nicer"
   :ensure t
   :diminish
   :config
-  (yas-global-mode 1))
+  (yas-global-mode 1)
+  )
 
 ;;; dependancies for pyls:
 ;;; Rope: completions and renaming (Downloaded)
@@ -118,12 +136,15 @@ left. Makes making indented lists nicer"
   :hook
   ((python-mode c-mode) . eglot-ensure)
   :bind
+  ("C-c e d" . 'eglot-find-declaration)
+  ("C-c e e" . 'eglot-reconnect)
   ("C-c e r" . 'eglot-rename)
   ("C-c e f" . 'eglot-format-buffer)
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
   (setq eglot-autoshutdown t)
+  (push :codeActionProvider eglot-ignored-server-capabilites)
   (setq eglot-events-buffer-size 0))
 
 (use-package flyspell-correct-ivy
@@ -131,7 +152,7 @@ left. Makes making indented lists nicer"
   :diminish
   :after ivy
   :config
-  (bind-key (kbd "C-;") 'flyspell-correct-wrapper flyspell-mode-map))
+  (bind-key (kbd "C-o s") 'flyspell-correct-wrapper flyspell-mode-map))
 
 (use-package multiple-cursors
   :ensure t
@@ -144,6 +165,8 @@ left. Makes making indented lists nicer"
          ("C--" . er/contract-region)))
 
 ;; Search / Movement / Quality of life
+
+
 (use-package ivy
   :ensure t
   :diminish
@@ -162,29 +185,30 @@ left. Makes making indented lists nicer"
 (use-package avy
   :ensure t
   :init (unbind-key (kbd "C-z"))
-  :bind ("C-z" . avy-goto-char))
+  :bind
+  (("C-z" . avy-goto-char)
+   ("C-c a c l" . avy-copy-line)
+   ("C-c a c r" . avy-copy-region)
+   ("C-c a m l" . avy-move-line)
+   ("C-c a m r" . avy-move-region)
+   ("C-c a k l" . avy-kill-line)
+   ("C-c a k r" . avy-kill-region)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; AUTOMATICALLY CONFIGURED DONT TOUCH ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-auto-complete-chars '(40 41 46))
- '(company-backends
-   '(company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev))
- '(custom-safe-themes
-   '("1526aeed166165811eefd9a6f9176061ec3d121ba39500af2048073bea80911e" "fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "50d07ab55e2b5322b2a8b13bc15ddf76d7f5985268833762c500a90e2a09e7aa" default))
- '(electric-pair-mode t)
- '(package-selected-packages
-   '(doom-modeline doom-themes yasnippet eglot key-chord smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
- '(show-paren-mode t))
-(custom-set-faces
+;;(custom-set-variables
+;; ;; custom-set-variables was added by Custom.
+;; ;; If you edit it by hand, you could mess it up, so be careful.
+;; ;; Your init file should contain only one such instance.
+;; ;; If there is more than one, they won't work right.
+;; ;;'(company-backends
+;; ;;  '(company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev))
+;; '(package-selected-packages
+;;   '(which-key doom-modeline doom-themes yasnippet eglot key-chord smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
+;;(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
-(put 'upcase-region 'disabled nil)
+;; )
