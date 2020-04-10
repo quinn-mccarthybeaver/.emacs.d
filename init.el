@@ -47,13 +47,19 @@
 (setq mouse-wheel-scroll-amount '(2 ((shift) . 4) ((meta)) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
+(defun beginning-of-indent-or-line ()
+  (interactive)
+  (let ((pt (point)))
+    (beginning-of-line-text)
+    (when (eq pt (point))
+      (beginning-of-line))))
+
+(bind-key (kbd "C-a") 'beginning-of-indent-or-line)
+
 ;; Org-mode defaults
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'org-indent-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
-
-(setq org-agenda-files "~/org/")
-(setq org-agenda-file-regexp ".*org^")
 
 (defun my-org-newline-and-indent ()
   "makes new item, indents, and shifts the item head to the
@@ -92,8 +98,8 @@ left. Makes making indented lists nicer"
   :after all-the-icons
   :ensure t
   :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-icon t))
+  :custom
+  (doom-modeline-icon t))
 
 ;; Editing
 (use-package key-chord
@@ -110,19 +116,18 @@ left. Makes making indented lists nicer"
   (:map company-active-map
 	("C-n" . 'company-select-next)
 	("C-p" . 'company-select-previous))
+  :custom
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-idle-delay 0)
   :config
-  (global-company-mode 1)
-  (setq company-minimum-prefix-length 2)
-  (setq company-show-numbers t)
-  (setq company-idle-delay 0)
-  (setq-default abbrev-mode nil))
+  (global-company-mode 1))
 
 (use-package yasnippet
   :ensure t
   :diminish
   :config
-  (yas-global-mode 1)
-  )
+  (yas-global-mode 1))
 
 ;;; dependancies for pyls:
 ;;; Rope: completions and renaming (Downloaded)
@@ -140,12 +145,12 @@ left. Makes making indented lists nicer"
   ("C-c e e" . 'eglot-reconnect)
   ("C-c e r" . 'eglot-rename)
   ("C-c e f" . 'eglot-format-buffer)
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-events-buffer-size 0))
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
-  (setq eglot-autoshutdown t)
-  (push :codeActionProvider eglot-ignored-server-capabilites)
-  (setq eglot-events-buffer-size 0))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -194,21 +199,16 @@ left. Makes making indented lists nicer"
    ("C-c a k l" . avy-kill-line)
    ("C-c a k r" . avy-kill-region)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; AUTOMATICALLY CONFIGURED DONT TOUCH ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(custom-set-variables
-;; ;; custom-set-variables was added by Custom.
-;; ;; If you edit it by hand, you could mess it up, so be careful.
-;; ;; Your init file should contain only one such instance.
-;; ;; If there is more than one, they won't work right.
-;; ;;'(company-backends
-;; ;;  '(company-bbdb company-semantic company-clang company-xcode company-cmake company-capf company-files company-oddmuse company-dabbrev))
-;; '(package-selected-packages
-;;   '(which-key doom-modeline doom-themes yasnippet eglot key-chord smart-mode-line flyspell-correct-ivy company counsel swiper avy ivy expand-region multiple-cursors base16-theme use-package diminish))
-;;(custom-set-faces
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy eglot yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
+(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-;; )
+ )
