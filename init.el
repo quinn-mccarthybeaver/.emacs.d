@@ -48,13 +48,40 @@
 (setq mouse-wheel-progressive-speed nil)
 
 (defun beginning-of-indent-or-line ()
+  "move to beginning of line text unless already there, then move
+to beginning of the line."
   (interactive)
   (let ((pt (point)))
     (beginning-of-line-text)
     (when (eq pt (point))
       (beginning-of-line))))
+(global-set-key (kbd "C-a") 'beginning-of-indent-or-line)
 
-(bind-key (kbd "C-a") 'beginning-of-indent-or-line)
+(defun open-previous-line ()
+  "moves current line down one."
+  (interactive)
+  (beginning-of-line)
+  (open-line 1)
+  (indent-for-tab-command))
+(global-set-key (kbd "C-o") 'open-previous-line)
+
+(defun open-next-line ()
+  "Opens and moves to next line, regardless of current column
+position."
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+(global-set-key (kbd "<C-return>") 'open-next-line)
+
+(defun kill-and-join-forward ()
+  "if at the end of line, brings below line up and deletes
+  whitespace"
+  (interactive)
+  (if (and (eolp) (not (bolp)))
+      (delete-indentation t)
+    (kill-line))
+  (indent-for-tab-command))
+(global-set-key (kbd "C-k") 'kill-and-join-forward)
 
 ;; Org-mode defaults
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -69,7 +96,6 @@ left. Makes making indented lists nicer"
   (org-indent-item)
   (org-shiftleft))
 (eval-after-load 'org '(bind-key (kbd "C-c <C-return>") 'my-org-newline-and-indent org-mode-map))
-
 
 ;;; PACKAGES
 
@@ -100,6 +126,13 @@ left. Makes making indented lists nicer"
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-icon t))
+
+(use-package linum-relative
+  :ensure t
+  :custom
+  (linum-relative-backend 'display-line-numbers-mode)
+  :config
+  (linum-relative-global-mode))
 
 ;; Editing
 (use-package key-chord
@@ -147,10 +180,20 @@ left. Makes making indented lists nicer"
   ("C-c e f" . 'eglot-format-buffer)
   :custom
   (eglot-autoshutdown t)
-  (eglot-events-buffer-size 0))
+  (eglot-events-buffer-size 0)
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
+  (add-to-list 'eglot-server-programs '(web-mode . ("javascript-typescript-stdio"))))
+
+(use-package web-mode
+  :ensure t
+  :custom
+  (web-mode-content-types-alist '(("jsx" . "\\.jsx?\\'")
+				  ("jsx" . "\\.html\\'")))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -205,7 +248,7 @@ left. Makes making indented lists nicer"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy eglot yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
+   '(linum-relative avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy eglot yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
