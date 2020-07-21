@@ -1,25 +1,28 @@
 ;; initial setup
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-(package-initialize)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(straight-use-package 'use-package)
 
 (eval-when-compile
   (require 'use-package))
 
-(use-package diminish
-  :ensure t)
-(use-package bind-key
-  :ensure t)
+(setq straight-use-package-by-default t)
+
+(use-package bind-key)
 
 (use-package which-key
-  :ensure t
+  :straight t
   :config
   (which-key-add-key-based-replacements
     "C-c &" "Yasnippet"
@@ -77,11 +80,26 @@ position."
   "if at the end of line, brings below line up and deletes
   whitespace"
   (interactive)
-  (if (and (eolp) (not (bolp)))
-      (delete-indentation t)
+  (if (and (eolp) (not (bolp)))      (delete-indentation t)
     (kill-line))
   (indent-for-tab-command))
 (global-set-key (kbd "C-k") 'kill-and-join-forward)
+
+;; ibuffer config
+(use-package ibuffer
+  :bind
+  ("C-x C-b" . ibuffer)
+  :custom
+  (ibuffer-expert t)
+  :hook
+  (ibuffer-mode . (lambda ()
+                    (ibuffer-auto-mode 1)
+                    (ibuffer-switch-to-saved-filter-groups "Default")))
+  :config
+  (setq-default ibuffer-saved-filter-groups
+              '(("Default"
+                 ("Dired" (mode . dired-mode))
+		 ("Temporary" (name . "\*.*\*"))))))
 
 ;; Org-mode defaults
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -108,27 +126,27 @@ left. Makes making indented lists nicer"
 ;; doom-outrun-electric
 
 (use-package base16-theme
-  :ensure t)
+  :straight t)
 
 (use-package doom-themes
-  :ensure t
+  :straight t
   :config
   ;;(load-them 'base16-gruvbox-dark-pale)
   ;; the nil enables the theme immediatly
   (load-theme 'doom-outrun-electric t nil))
 
 (use-package all-the-icons
-  :ensure t)
+  :straight t)
 
 (use-package doom-modeline
   :after all-the-icons
-  :ensure t
+  :straight t
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-icon t))
 
 (use-package linum-relative
-  :ensure t
+  :straight t
   :custom
   (linum-relative-backend 'display-line-numbers-mode)
   :config
@@ -136,13 +154,13 @@ left. Makes making indented lists nicer"
 
 ;; Editing
 (use-package key-chord
-  :ensure t
+  :straight t
   :config
   (key-chord-mode 1)
   (key-chord-define-global ";;" "\C-e;"))
 
 (use-package company
-  :ensure t
+  :straight t
   :diminish
   :bind
   ("C-;" . company-complete)
@@ -157,7 +175,7 @@ left. Makes making indented lists nicer"
   (global-company-mode 1))
 
 (use-package yasnippet
-  :ensure t
+  :straight t
   :diminish
   :config
   (yas-global-mode 1))
@@ -169,7 +187,7 @@ left. Makes making indented lists nicer"
 ;;; pycodestyle: checks codestyle
 ;;; YAPF: code formatting (Downloaded)
 (use-package eglot
-  :ensure t
+  ;;:straight t
   :diminish
   :hook
   ((python-mode c-mode) . eglot-ensure)
@@ -184,31 +202,33 @@ left. Makes making indented lists nicer"
   :config
   (add-to-list 'eglot-server-programs '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
-  (add-to-list 'eglot-server-programs '(web-mode . ("javascript-typescript-stdio"))))
+  ;(add-to-list 'eglot-server-programs '(web-mode . ("javascript-typescript-stdio")))
+  )
 
-(use-package web-mode
-  :ensure t
-  :custom
-  (web-mode-content-types-alist '(("jsx" . "\\.jsx?\\'")
-				  ("jsx" . "\\.html\\'")))
-  :config
-  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+;;(use-package web-mode
+;;  ;;:straight t
+;;  :custom
+;;  (web-mode-content-types-alist '(("jsx" . "\\.jsx?\\'")
+;;				  ("jsx" . "\\.html\\'")))
+;;  :config
+;;  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+;;  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
 (use-package flyspell-correct-ivy
-  :ensure t
+  :straight t
   :diminish
   :after ivy
   :config
   (bind-key (kbd "C-o s") 'flyspell-correct-wrapper flyspell-mode-map))
 
 (use-package multiple-cursors
-  :ensure t
-  :bind (("C->" . mc/mark-next-like-this)
-         ("C-<". mc/mark-previous-like-this)))
+  :straight t
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<". mc/mark-previous-like-this))
 
 (use-package expand-region
-  :ensure t
+  :straight t
   :bind (("C-=" . er/expand-region)
          ("C--" . er/contract-region)))
 
@@ -216,22 +236,23 @@ left. Makes making indented lists nicer"
 
 
 (use-package ivy
-  :ensure t
+  :straight t
   :diminish
   :config
   (ivy-mode 1))
 
 (use-package swiper
-  :ensure t
+  :straight t
   :after ivy
-  :bind ("C-s" . swiper))
+  :bind
+  ("C-s" . swiper))
 
 (use-package counsel
-  :ensure t
+  :straight t
   :after (ivy swiper))
 
 (use-package avy
-  :ensure t
+  :straight t
   :init (unbind-key (kbd "C-z"))
   :bind
   (("C-z" . avy-goto-char)
@@ -248,7 +269,7 @@ left. Makes making indented lists nicer"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(linum-relative avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy eglot yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
+   '(linum-relative avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
