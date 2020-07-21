@@ -22,7 +22,6 @@
 (use-package bind-key)
 
 (use-package which-key
-  :straight t
   :config
   (which-key-add-key-based-replacements
     "C-c &" "Yasnippet"
@@ -125,28 +124,21 @@ left. Makes making indented lists nicer"
 ;; doom-manegarm
 ;; doom-outrun-electric
 
-(use-package base16-theme
-  :straight t)
-
 (use-package doom-themes
-  :straight t
   :config
   ;;(load-them 'base16-gruvbox-dark-pale)
   ;; the nil enables the theme immediatly
   (load-theme 'doom-outrun-electric t nil))
 
-(use-package all-the-icons
-  :straight t)
+(use-package all-the-icons)
 
 (use-package doom-modeline
   :after all-the-icons
-  :straight t
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-icon t))
 
 (use-package linum-relative
-  :straight t
   :custom
   (linum-relative-backend 'display-line-numbers-mode)
   :config
@@ -154,13 +146,11 @@ left. Makes making indented lists nicer"
 
 ;; Editing
 (use-package key-chord
-  :straight t
   :config
   (key-chord-mode 1)
   (key-chord-define-global ";;" "\C-e;"))
 
 (use-package company
-  :straight t
   :diminish
   :bind
   ("C-;" . company-complete)
@@ -175,7 +165,6 @@ left. Makes making indented lists nicer"
   (global-company-mode 1))
 
 (use-package yasnippet
-  :straight t
   :diminish
   :config
   (yas-global-mode 1))
@@ -187,7 +176,6 @@ left. Makes making indented lists nicer"
 ;;; pycodestyle: checks codestyle
 ;;; YAPF: code formatting (Downloaded)
 (use-package eglot
-  ;;:straight t
   :diminish
   :hook
   ((python-mode c-mode) . eglot-ensure)
@@ -206,7 +194,6 @@ left. Makes making indented lists nicer"
   )
 
 ;;(use-package web-mode
-;;  ;;:straight t
 ;;  :custom
 ;;  (web-mode-content-types-alist '(("jsx" . "\\.jsx?\\'")
 ;;				  ("jsx" . "\\.html\\'")))
@@ -215,20 +202,17 @@ left. Makes making indented lists nicer"
 ;;  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
 
 (use-package flyspell-correct-ivy
-  :straight t
   :diminish
   :after ivy
   :config
   (bind-key (kbd "C-o s") 'flyspell-correct-wrapper flyspell-mode-map))
 
 (use-package multiple-cursors
-  :straight t
   :bind
   ("C->" . mc/mark-next-like-this)
   ("C-<". mc/mark-previous-like-this))
 
 (use-package expand-region
-  :straight t
   :bind (("C-=" . er/expand-region)
          ("C--" . er/contract-region)))
 
@@ -236,23 +220,19 @@ left. Makes making indented lists nicer"
 
 
 (use-package ivy
-  :straight t
   :diminish
   :config
   (ivy-mode 1))
 
 (use-package swiper
-  :straight t
   :after ivy
   :bind
   ("C-s" . swiper))
 
 (use-package counsel
-  :straight t
   :after (ivy swiper))
 
 (use-package avy
-  :straight t
   :init (unbind-key (kbd "C-z"))
   :bind
   (("C-z" . avy-goto-char)
