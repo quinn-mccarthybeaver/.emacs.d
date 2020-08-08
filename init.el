@@ -1,5 +1,7 @@
-;; initial setup
+;; Bootstraps straight process
+;; possible source of slow start times
 (defvar bootstrap-version)
+(setq straight-fix-flycheck t)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
@@ -29,7 +31,8 @@
     "C-c a" "Avy"
     "C-c a m" "Move"
     "C-c a c" "Copy"
-    "C-c a k" "Kill")
+    "C-c a k" "Kill"
+    "C-c m" "multiple cursors")
   (which-key-mode 1))
 
 ;; Sane defaults
@@ -98,7 +101,7 @@ position."
   (setq-default ibuffer-saved-filter-groups
               '(("Default"
                  ("Dired" (mode . dired-mode))
-		 ("Temporary" (name . "\*.*\*"))))))
+		 ("System" (name . "\*.*\*"))))))
 
 ;; Org-mode defaults
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -126,9 +129,10 @@ left. Makes making indented lists nicer"
 
 (use-package doom-themes
   :config
-  ;;(load-them 'base16-gruvbox-dark-pale)
+  (load-theme 'doom-gruvbox t)
   ;; the nil enables the theme immediatly
-  (load-theme 'doom-outrun-electric t nil))
+  ;;(load-theme 'doom-outrun-electric nil)
+  )
 
 (use-package all-the-icons)
 
@@ -209,8 +213,9 @@ left. Makes making indented lists nicer"
 
 (use-package multiple-cursors
   :bind
-  ("C->" . mc/mark-next-like-this)
-  ("C-<". mc/mark-previous-like-this))
+  ("C->"     . mc/mark-next-like-this)
+  ("C-<"     . mc/mark-previous-like-this)
+  ("C-c m a" . mc/vertical-align-with-space))
 
 (use-package expand-region
   :bind (("C-=" . er/expand-region)
@@ -243,11 +248,14 @@ left. Makes making indented lists nicer"
    ("C-c a k l" . avy-kill-line)
    ("C-c a k r" . avy-kill-region)))
 
+;; Machine generated, don't touch
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("e2acbf379aa541e07373395b977a99c878c30f20c3761aac23e9223345526bcc" "730a87ed3dc2bf318f3ea3626ce21fb054cd3a1471dcd59c81a4071df02cb601" default))
  '(package-selected-packages
    '(linum-relative avy counsel swiper expand-region multiple-cursors flyspell-correct-ivy yasnippet company key-chord doom-modeline all-the-icons doom-themes base16-theme which-key diminish use-package)))
 (custom-set-faces
